@@ -1,7 +1,8 @@
 import numpy as np
 import tensorflow as tf
 
-import cka
+from tf_cka import cka
+
 
 class CKA_Test(tf.test.TestCase):
 

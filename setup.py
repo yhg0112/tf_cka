@@ -3,11 +3,14 @@
 from setuptools import find_packages
 from setuptools import setup
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
     name='tf_cka',
     version='0.1.0',
     description='Centered Kerenel Alignment implementation with tensorflowo 2.0',
-    long_description=(),
+    long_description=long_description,
     author='hyeongu yun',
     author_email='youaredead@snu.ac.kr',
     url='https://github.com/yhg0112/tf_cka',
