@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 
-from tf_cka import cka
+import tf_cka
 
 
 class CKA_Test(tf.test.TestCase):
@@ -14,26 +14,26 @@ class CKA_Test(tf.test.TestCase):
         self.Y = np.random.randn(self.BATCH_SIZE, self.DIM)
 
     def testLinearKernel(self):
-        np_result = cka.linear_kernel(self.X)
-        tf_result = cka.linear_kernel_tf(self.X)
+        np_result = tf_cka.linear_kernel(self.X)
+        tf_result = tf_cka.linear_kernel_tf(self.X)
 
         self.assertAllClose(np_result, tf_result.numpy())
 
     def testCentering(self):
-        np_result = cka.centering(cka.linear_kernel(self.X))
-        tf_result = cka.centering_tf(cka.linear_kernel_tf(self.X))
+        np_result = tf_cka.centering(tf_cka.linear_kernel(self.X))
+        tf_result = tf_cka.centering_tf(tf_cka.linear_kernel_tf(self.X))
 
         self.assertAllClose(np_result, tf_result.numpy())
 
     def testHSIC(self):
-        np_result = cka.hsic(self.X, self.Y, kernel=cka.linear_kernel)
-        tf_result = cka.hsic_tf(self.X, self.Y, kernel=cka.linear_kernel_tf)
+        np_result = tf_cka.hsic(self.X, self.Y, kernel=tf_cka.linear_kernel)
+        tf_result = tf_cka.hsic_tf(self.X, self.Y, kernel=tf_cka.linear_kernel_tf)
 
         self.assertAllClose(np_result, tf_result.numpy())
 
     def testCKA(self):
-        np_result = cka.cka(self.X, self.Y, kernel=cka.linear_kernel)
-        tf_result = cka.cka_tf(self.X, self.Y, kernel=cka.linear_kernel_tf)
+        np_result = tf_cka.cka(self.X, self.Y, kernel=tf_cka.linear_kernel)
+        tf_result = tf_cka.cka_tf(self.X, self.Y, kernel=tf_cka.linear_kernel_tf)
 
         self.assertAllClose(np_result, tf_result.numpy())
 
