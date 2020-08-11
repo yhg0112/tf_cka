@@ -32,7 +32,18 @@ def hsic(X, Y, kernel=linear_kernel):
 
 
 def cka(X, Y, kernel=linear_kernel):
-    return hsic(X, Y, kernel=kernel) / np.sqrt(hsic(X, X, kernel=kernel) * hsic(Y, Y, kernel=kernel))
+    gram_X = kernel(X)
+    gram_Y = kernel(Y)
+
+    centered_gram_X = centering(gram_X)
+    centered_gram_Y = centering(gram_Y)
+
+    scaled_hsic = np.dot(np.ravel(centered_gram_X), np.ravel(centered_gram_Y))
+
+    norm_X = np.linalg.norm(gram_X)
+    norm_Y = np.linalg.norm(gram_Y)
+
+    return scaled_hsic / (norm_X * norm_Y)
 
 
 def linear_kernel_tf(X):
@@ -62,4 +73,15 @@ def hsic_tf(X, Y, kernel=linear_kernel_tf):
 
 
 def cka_tf(X, Y, kernel=linear_kernel_tf):
-    return hsic_tf(X, Y, kernel=kernel) / tf.sqrt(hsic_tf(X, X, kernel=kernel) * hsic_tf(Y, Y, kernel=kernel))
+    gram_X = kernel(X)
+    gram_Y = kernel(Y)
+
+    centered_gram_X = centering_tf(gram_X)
+    centered_gram_Y = centering_tf(gram_Y)
+
+    scaled_hsic = tf.tensordot(tf.reshape(centered_gram_X, shape=[-1]), tf.reshape(centered_gram_Y, shape=[-1]), axes=1)
+
+    norm_X = tf.norm(gram_X)
+    norm_Y = tf.norm(gram_Y)
+
+    return scaled_hsic / (norm_X * norm_Y)
