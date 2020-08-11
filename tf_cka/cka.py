@@ -40,8 +40,8 @@ def cka(X, Y, kernel=linear_kernel):
 
     scaled_hsic = np.dot(np.ravel(centered_gram_X), np.ravel(centered_gram_Y))
 
-    norm_X = np.linalg.norm(gram_X)
-    norm_Y = np.linalg.norm(gram_Y)
+    norm_X = np.linalg.norm(centered_gram_X)
+    norm_Y = np.linalg.norm(centered_gram_Y)
 
     return scaled_hsic / (norm_X * norm_Y)
 
@@ -81,7 +81,7 @@ def cka_tf(X, Y, kernel=linear_kernel_tf):
 
     scaled_hsic = tf.tensordot(tf.reshape(centered_gram_X, shape=[-1]), tf.reshape(centered_gram_Y, shape=[-1]), axes=1)
 
-    norm_X = tf.norm(gram_X)
-    norm_Y = tf.norm(gram_Y)
+    norm_X = tf.norm(centered_gram_X)
+    norm_Y = tf.norm(centered_gram_Y)
 
     return scaled_hsic / (norm_X * norm_Y)
