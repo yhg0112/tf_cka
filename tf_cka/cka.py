@@ -120,11 +120,13 @@ def hsic_torch(X, Y, kernel=linear_kernel_torch):
     return scaled_hsic
 
 def cka_torch(X, Y, kernel=linear_kernel_torch):
+    X = X.type(torch.float32)
+    Y = Y.type(torch.float32)
     gram_X = kernel(X)
     gram_Y = kernel(Y)
 
-    centered_gram_X = centering_torch(gram_X)
-    centered_gram_Y = centering_torch(gram_Y)
+    centered_gram_X = centering_torch(gram_X).type(torch.float32)
+    centered_gram_Y = centering_torch(gram_Y).type(torch.float32)
 
     scaled_hsic = torch.dot(torch.flatten(centered_gram_X), torch.flatten(centered_gram_Y))    
     #scaled_hsic = torch.dot(torch.reshape(centered_gram_X, shape=[-1]), torch.reshape(centered_gram_Y, shape=[-1]))
