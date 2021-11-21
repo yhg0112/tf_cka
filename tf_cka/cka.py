@@ -115,24 +115,28 @@ def hsic_torch(X, Y, kernel=linear_kernel_torch):
     centered_gram_Y = centering_torch(gram_Y)
 
     scaled_hsic = torch.dot(torch.flatten(centered_gram_X), torch.flatten(centered_gram_Y))
-    #scaled_hsic = torch.dot(torch.reshape(centered_gram_X, shape=[-1]), torch.reshape(centered_gram_Y, shape=[-1]))
 
     return scaled_hsic
 
 def cka_torch(X, Y, kernel=linear_kernel_torch):
-    X = X.type(torch.float32)
-    Y = Y.type(torch.float32)
+    d_type = X.type()
+    assert X.type() == Y.type()
+
+    X = X.type(torch.float64)
+    Y = Y.type(torch.float64)
+
     gram_X = kernel(X)
     gram_Y = kernel(Y)
 
-    centered_gram_X = centering_torch(gram_X).type(torch.float32)
-    centered_gram_Y = centering_torch(gram_Y).type(torch.float32)
+    centered_gram_X = centering_torch(gram_X)
+    centered_gram_Y = centering_torch(gram_Y)
 
     scaled_hsic = torch.dot(torch.flatten(centered_gram_X), torch.flatten(centered_gram_Y))    
-    #scaled_hsic = torch.dot(torch.reshape(centered_gram_X, shape=[-1]), torch.reshape(centered_gram_Y, shape=[-1]))
 
-    norm_X = torch.norm(centered_gram_X)
-    norm_Y = torch.norm(centered_gram_Y)
+    norm_X = torch.linalg.norm(centered_gram_X)
+    norm_Y = torch.linalg.norm(centered_gram_Y)
 
-    return scaled_hsic / (norm_X * norm_Y)
+    cka_value = scaled_hsic / (norm_X * norm_Y)
+    cka_value = cka_value.type(d_type)
+    return cka_value
     
